@@ -34,7 +34,11 @@ export class TransactionValidator {
       ));
       }
       // PARA VERIFICACION 2
-      totalInputAmount += this.utxoPool.getUTXO(input.utxoId.txId, input.utxoId.outputIndex)?.amount || 0;
+      if(utxo){
+        totalInputAmount += utxo.amount; 
+      }else{
+        totalInputAmount += 0;
+      }
 
       // VERIFICACION 3
       const transactionData = this.createTransactionDataForSigning_(transaction);
@@ -55,8 +59,10 @@ export class TransactionValidator {
         { utxoId: input.utxoId }
       ));
       continue;
-    }
-    utxosVistos.add(input.utxoId);
+      }
+      else {
+        utxosVistos.add(input.utxoId);
+      }
     }
     const listaDeOutputs= transaction.outputs;
     for(let output of listaDeOutputs){
